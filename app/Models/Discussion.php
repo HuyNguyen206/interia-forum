@@ -9,6 +9,10 @@ class Discussion extends Model
 {
     use HasFactory;
 
+    public function isPinned()
+    {
+        return (bool) $this->pinned_at;
+    }
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -18,4 +22,15 @@ class Discussion extends Model
     {
         return $this->belongsTo(Topic::class);
     }
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
+
+    public function post()
+    {
+        return $this->hasOne(Post::class)->original();
+    }
+
 }

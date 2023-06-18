@@ -2,13 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\DiscussionResource;
-use App\Http\Resources\PostResource;
-use App\Models\Discussion;
 use App\Models\Post;
 use Illuminate\Http\Request;
 
-class DiscussionController extends Controller
+class PostController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -37,18 +34,15 @@ class DiscussionController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Discussion $discussion)
+    public function show(Post $post)
     {
-        return inertia()->render('Forum/Discussion/Show', [
-            'discussion' => DiscussionResource::make($discussion->load('topic')),
-            'posts' => PostResource::collection(Post::query()->with('discussion')->whereBelongsTo($discussion)->latest()->paginate(10))
-        ]);
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Discussion $discussion)
+    public function edit(Post $post)
     {
         //
     }
@@ -56,7 +50,7 @@ class DiscussionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Discussion $discussion)
+    public function update(Request $request, Post $post)
     {
         //
     }
@@ -64,7 +58,7 @@ class DiscussionController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Discussion $discussion)
+    public function destroy(Post $post)
     {
         //
     }

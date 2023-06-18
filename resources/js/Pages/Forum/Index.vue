@@ -2,6 +2,7 @@
 import {Head} from '@inertiajs/vue3';
 import ForumLayout from "@/Layouts/ForumLayout.vue";
 import Discussion from "@/Pages/Forum/Discussion.vue";
+import Pagination from "@/Pages/Common/Pagination.vue";
 
 defineProps({
     discussions: Array
@@ -17,7 +18,7 @@ defineProps({
         </template>
 
         <div class="py-12">
-            <div class="sm:px-6 lg:px-8">
+            <div>
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="flex justify-between items-start">
                         <div class="p-6 text-gray-900">You're logged in!</div>
@@ -32,13 +33,15 @@ defineProps({
                 </div>
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mt-4">
                   <Discussion v-for="discussion in discussions.data" :key="discussion.id" :discussion="discussion"/>
+
                 </div>
+                <Pagination :links="discussions.meta.links"></Pagination>
             </div>
 
         </div>
         <template #side>
             <div class="py-12">
-                <div class="sm:px-6 lg:px-8">
+                <div>
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div class="p-6 text-gray-900">Side</div>
                     </div>

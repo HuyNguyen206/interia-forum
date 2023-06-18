@@ -26,6 +26,7 @@ Route::get('/', function () {
 });
 
 Route::get('/', [\App\Http\Controllers\ForumController::class, 'index'])->name('home');
+Route::get('/discussions/{discussion:slug}', [\App\Http\Controllers\DiscussionController::class, 'show'])->name('discussions.show');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
