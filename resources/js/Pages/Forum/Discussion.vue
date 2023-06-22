@@ -19,7 +19,7 @@ defineProps({
                     </div>
                     <span class="font-semibold">
                           <template v-if="discussion.is_pinned">
-                        Pinned
+                        [Pinned]
                     </template>
                          {{discussion.title}}
                     </span>

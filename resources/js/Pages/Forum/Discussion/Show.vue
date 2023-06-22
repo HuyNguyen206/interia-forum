@@ -11,7 +11,7 @@ defineProps({
 </script>
 
 <template>
-    <Head :title="discussion.title"/>
+    <Head :title="discussion.data.title"/>
 
     <ForumLayout>
         <template #header>
@@ -29,7 +29,7 @@ defineProps({
                             </div>
                             <span class="font-semibold">
                           <template v-if="discussion.data.is_pinned">
-                        Pinned
+                        [Pinned]
                     </template>
                          {{discussion.data.title}}
                     </span>

@@ -5,13 +5,12 @@ import Discussion from "@/Pages/Forum/Discussion.vue";
 import Pagination from "@/Pages/Common/Pagination.vue";
 
 defineProps({
-    discussions: Array
+    discussions: Object
 })
 </script>
 
 <template>
-    <Head title="Dashboard"/>
-
+    <Head title="Discussion"/>
     <ForumLayout>
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">Dashboard</h2>
