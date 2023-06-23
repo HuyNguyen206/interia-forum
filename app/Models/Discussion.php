@@ -30,7 +30,17 @@ class Discussion extends Model
 
     public function post()
     {
-        return $this->hasOne(Post::class)->original();
+        return $this->hasOne(Post::class)->original()->withDefault();
+    }
+
+    public function latestPost()
+    {
+       return $this->hasOne(Post::class)->latestOfMany();
+    }
+
+    public function participants()
+    {
+        return $this->hasManyThrough(User::class, Post::class, 'discussion_id', 'id', 'id', 'user_id')->oldest();
     }
 
 }
