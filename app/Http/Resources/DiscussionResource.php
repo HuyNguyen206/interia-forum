@@ -14,14 +14,22 @@ class DiscussionResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return $this->only('id', 'title', 'slug') +
+        $data = $this->only('id', 'title', 'slug') +
             [
                 'is_pinned' => $this->isPinned(),
                 'post' => PostResource::make($this->whenLoaded('post')),
                 'user' => UserResource::make($this->whenLoaded('user')),
                 'topic' => $this->whenLoaded('topic'),
                 'latest_post' => PostResource::make($this->whenLoaded('latestPost')),
-                'participants' => UserResource::collection($this->whenLoaded('participants'))
+                'participants' => UserResource::collection($this->whenLoaded('participants')),
             ];
+
+        if ($this->relationLoaded('participants')) {
+            $hasMore = $this->participants_count > 3;
+            $data['remain_participant_count'] = $hasMore ? $this->participants_count - 3 : 0;
+            $data['has_more_participant'] =  $hasMore;
+        }
+
+        return $data;
     }
 }

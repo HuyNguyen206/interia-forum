@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Staudenmeir\EloquentEagerLimit\HasEagerLimit;
 
 class Discussion extends Model
 {
-    use HasFactory;
+    use HasFactory, HasEagerLimit;
 
     public function isPinned()
     {
@@ -40,7 +41,10 @@ class Discussion extends Model
 
     public function participants()
     {
-        return $this->hasManyThrough(User::class, Post::class, 'discussion_id', 'id', 'id', 'user_id')->oldest();
+        return $this->hasManyThrough(User::class, Post::class, 'discussion_id', 'id', 'id', 'user_id')
+            ->orderByRaw('max(posts.created_at) asc')
+            ->addselect(['users.id', 'users.email', 'users.username'])
+            ->groupBy('users.id', 'users.email', 'users.username', 'posts.discussion_id');
     }
 
 }

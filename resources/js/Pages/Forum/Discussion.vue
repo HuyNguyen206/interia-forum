@@ -33,9 +33,16 @@ defineProps({
                 <p>
                     {{ discussion.user.username }}
                 </p>
-                <div class="flex -space-x-2">
-                    <img :title="participant.username" :key="participant.id" v-for="participant in discussion.participants" :src="participant.avatar" :alt="participant.username"
-                      class="first-of-type:w-8 first-of-type:h-8 w-6 h-6 rounded-full ring-2 ring-white">
+                <div class="flex space-x-2">
+                    <div class="flex -space-x-2">
+                        <img :title="participant.username" :key="participant.id" v-for="participant in discussion.participants" :src="participant.avatar" :alt="participant.username"
+                             class="first-of-type:w-8 first-of-type:h-8 w-6 h-6 rounded-full ring-2 ring-white">
+                    </div>
+                    <tempplate v-if="discussion.has_more_participant">
+                        <div>
+                            + {{discussion.remain_participant_count}}
+                        </div>
+                    </tempplate>
                 </div>
 
             </div>

@@ -11,7 +11,10 @@ class ForumController extends Controller
     {
        return inertia()->render('Forum/Index', [
            'discussions' => DiscussionResource::collection(Discussion::query()
-               ->with(['user', 'topic', 'post.user', 'latestPost.user', 'posts.user', 'participants'])
+               ->with(['user', 'topic', 'post.user', 'latestPost.user', 'posts.user','participants' => function($query){
+                   $query->limit(3);
+               }])
+               ->withCount('participants')
                ->latest('pinned_at')->latest('created_at')->paginate(10))
        ]);
     }
