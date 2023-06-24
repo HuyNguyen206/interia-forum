@@ -3,6 +3,7 @@ import {Head} from '@inertiajs/vue3';
 import ForumLayout from "@/Layouts/ForumLayout.vue";
 import Discussion from "@/Pages/Forum/Discussion.vue";
 import Pagination from "@/Pages/Common/Pagination.vue";
+import Navigation from "@/Pages/Common/Navigation.vue";
 
 defineProps({
     discussions: Object
@@ -39,13 +40,7 @@ defineProps({
 
         </div>
         <template #side>
-            <div class="py-12">
-                <div>
-                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <div class="p-6 text-gray-900">Side</div>
-                    </div>
-                </div>
-            </div>
+           <Navigation :queries=discussions.queries></Navigation>
         </template>
 
     </ForumLayout>

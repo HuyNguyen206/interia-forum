@@ -47,10 +47,18 @@ defineProps({
 
             </div>
         </div>
-        <template v-if="discussion.latest_post">
-            <Link class="inline-block text-gray-400 text-sm" :href="route('discussions.show', discussion)">Latest post by {{discussion.latest_post.user.username}}
-                <time>{{discussion.latest_post.created_at}}</time> </Link>
-        </template>
+        <div class="flex justify-between">
+            <div>
+                <template v-if="discussion.latest_post">
+                    <Link :class="{'text-red-300': !discussion.latest_post.user}" class="inline-block text-gray-400 text-sm" :href="route('discussions.show', discussion)">Latest post by {{discussion.latest_post.user?.username || '[Deleted user]'}}
+                        <time>{{discussion.latest_post.created_at}}</time> </Link>
+                </template>
+            </div>
+
+            <span class="inline-block text-sm">
+                {{discussion.posts_count}}
+            </span>
+        </div>
 
 
     </Link>

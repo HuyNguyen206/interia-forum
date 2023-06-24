@@ -40,7 +40,7 @@ class DiscussionController extends Controller
     public function show(Discussion $discussion)
     {
         return inertia()->render('Forum/Discussion/Show', [
-            'discussion' => DiscussionResource::make($discussion->load('topic')),
+            'discussion' => DiscussionResource::make($discussion->load('topic')->loadCount('posts')),
             'posts' => PostResource::collection(Post::query()->with(['discussion', 'user'])->whereBelongsTo($discussion)->latest()->paginate(10))
         ]);
     }
