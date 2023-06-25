@@ -1,6 +1,6 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import {Head} from '@inertiajs/vue3';
+import Create from "@/Pages/Forum/Discussion/Create.vue";
 </script>
 
 <template>
@@ -14,4 +14,6 @@ import {Head} from '@inertiajs/vue3';
           </div>
       </div>
     </AuthenticatedLayout>
+
+    <Create></Create>
 </template>

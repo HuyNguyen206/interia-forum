@@ -14,8 +14,22 @@ class ForumController extends Controller
     {
        return inertia()->render('Forum/Index', [
            'discussions' => DiscussionResource::collection(Discussion::query()
+               ->when($topic = $request->topic, function (Builder $query) use ($topic){
+                   $query->whereHas('topic', function ($query) use ($topic) {
+                       $query->where('slug', $topic);
+                   });
+               })
                ->when($request->no_reply, function (Builder $query){
                    $query->whereDoesntHave('posts');
+               })
+               ->when($request->my_discussion, function (Builder $query) use ($request){
+                   $query->whereBelongsTo($request->user());
+               })
+               ->when($request->is_participant, function (Builder $query) use ($request){
+                   $query->whereHas('posts', function ($query) use ($request){
+                       $query->whereBelongsTo($request->user())
+                             ->whereNotNull('post_parent_id');
+                   });
                })
                ->with(['user', 'topic', 'post.user', 'latestPost.user', 'posts.user','participants' => function($query){
                    $query->limit(3);
@@ -28,7 +42,7 @@ class ForumController extends Controller
                    ->limit(1), 'desc'
                )
 //               ->latest('created_at')
-               ->paginate(1)->appends($queries = $request->query()))->additional(['queries' => $queries])
+               ->paginate(10)->appends($queries = $request->query()))->additional(['queries' => $queries])
        ]);
     }
 }

@@ -3,7 +3,6 @@ import {Head} from '@inertiajs/vue3';
 import ForumLayout from "@/Layouts/ForumLayout.vue";
 import Post from "@/Pages/Forum/Discussion/Post.vue";
 import Pagination from "@/Pages/Common/Pagination.vue";
-import Navigation from "@/Pages/Common/Navigation.vue";
 
 defineProps({
     discussion: Object,
@@ -49,7 +48,7 @@ defineProps({
 
         </div>
         <template #side>
-           <Navigation></Navigation>
+<!--           <Navigation></Navigation>-->
         </template>
 
     </ForumLayout>

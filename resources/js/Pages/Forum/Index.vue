@@ -1,13 +1,21 @@
 <script setup>
-import {Head} from '@inertiajs/vue3';
+import {Head, router} from '@inertiajs/vue3';
 import ForumLayout from "@/Layouts/ForumLayout.vue";
 import Discussion from "@/Pages/Forum/Discussion.vue";
 import Pagination from "@/Pages/Common/Pagination.vue";
 import Navigation from "@/Pages/Common/Navigation.vue";
+import _omitby from 'lodash.omitby'
+import _empty from 'lodash.isempty'
 
 defineProps({
     discussions: Object
 })
+
+const filterTopic = (e) => {
+    router.visit(route('home', _omitby({topic: e.target.value}, _empty)), {
+        preserveScroll: true
+    })
+}
 </script>
 
 <template>
@@ -22,10 +30,10 @@ defineProps({
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="flex justify-between items-start">
                         <div class="p-6 text-gray-900">You're logged in!</div>
-                        <select id="countries"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg">
+                        <select
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg" @change="filterTopic">
                             <option value="">Choose a topic</option>
-                            <option :value="topic.id" v-for="topic in $page.props.topics.data" :key="topic.id">
+                            <option :selected="discussions.queries.topic == topic.slug" :value="topic.slug" v-for="topic in $page.props.topics.data" :key="topic.id">
                                 {{ topic.name }}
                             </option>
                         </select>

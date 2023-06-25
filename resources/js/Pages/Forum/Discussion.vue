@@ -30,7 +30,7 @@ defineProps({
             </div>
 
             <div class="2/12">
-                <p>
+                <p class="text-sm">
                     {{ discussion.user.username }}
                 </p>
                 <div class="flex space-x-2">

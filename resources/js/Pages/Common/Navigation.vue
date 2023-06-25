@@ -16,6 +16,11 @@ defineProps({
                             <Link  :class="{'font-semibold':!Object.keys(queries).length || (Object.keys(queries).length == 1 && queries.page)}" :href="route('home')"> All Discussion </Link>
                             <Link :class="{'font-semibold':queries.no_reply}" :href="route('home', {'no_reply': 1})"> No replies </Link>
                     </ul>
+
+                        <ul class="flex flex-col space-y-2 border-t border-t-gray-200 mt-2 pt-2" v-if="$page.props.auth.user">
+                            <Link  :class="{'font-semibold':queries.my_discussion}" :href="route('home', {'my_discussion': 1})"> My Discussion </Link>
+                            <Link :class="{'font-semibold':queries.is_participant}" :href="route('home', {'is_participant': 1})">My replies </Link>
+                    </ul>
                 </nav>
                 </div>
 
