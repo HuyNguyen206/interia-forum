@@ -27,8 +27,11 @@ Route::get('/', function () {
 
 Route::get('/', [\App\Http\Controllers\ForumController::class, 'index'])->name('home');
 Route::get('/discussions/{discussion:slug}', [\App\Http\Controllers\DiscussionController::class, 'show'])->name('discussions.show');
+Route::post('/posts/markdown/preview', [\App\Http\Controllers\PostController::class, 'previewMarkdown'])->name('posts.preview-markdown');
 
 Route::middleware('auth')->group(function () {
+    Route::post('discussions', [\App\Http\Controllers\DiscussionController::class, 'store'])->name('discussions.store');
+    Route::post('discussion/{discussion}/posts', [\App\Http\Controllers\PostController::class, 'store'])->name('posts.store');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

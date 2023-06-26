@@ -19,7 +19,10 @@
         "vue": "^3.2.41"
     },
     "dependencies": {
+        "@github/markdown-toolbar-element": "^2.1.1",
         "lodash.isempty": "^4.4.0",
-        "lodash.omitby": "^4.6.0"
+        "lodash.omitby": "^4.6.0",
+        "shiki": "^0.14.3",
+        "vite-svg-loader": "^4.0.0"
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Discussion;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Str;
@@ -24,6 +25,10 @@ class DiscussionResource extends JsonResource
                 'topic' => $this->whenLoaded('topic'),
                 'latest_post' => PostResource::make($this->whenLoaded('latestPost')),
                 'participants' => UserResource::collection($this->whenLoaded('participants')),
+                'can' => [
+                    'create' => $request->user()->can('create', Discussion::class),
+                    'reply' => $request->user()->can('reply', $this->resource),
+                ]
             ];
 
         if ($this->relationLoaded('participants')) {

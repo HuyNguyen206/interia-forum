@@ -4,11 +4,20 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 use Staudenmeir\EloquentEagerLimit\HasEagerLimit;
 
 class Discussion extends Model
 {
     use HasFactory, HasEagerLimit;
+
+    protected static function booted()
+    {
+        static::created(function (Discussion $discussion){
+           $discussion->slug = $discussion->id . '-' . Str::slug($discussion->title);
+           $discussion->save();
+        });
+    }
 
     public function isPinned()
     {

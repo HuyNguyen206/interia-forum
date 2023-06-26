@@ -7,6 +7,8 @@ use App\Http\Resources\PostResource;
 use App\Models\Discussion;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Validation\Rule;
 
 class DiscussionController extends Controller
 {
@@ -31,7 +33,23 @@ class DiscussionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->authorize('create', Discussion::class);
+
+        $data = $request->validate([
+            'title' => ['required', 'max:255'],
+            'body' => ['required', 'max:1000'],
+            'topic_id' => ['required', 'numeric', Rule::exists('topics', 'id')],
+        ]);
+
+        $discussion = $request->user()->discussions()->create(Arr::except($data, ['body']));
+
+        $discussion->posts()->create([
+            'user_id' => $request->user()->id,
+            'body' => $request->body,
+        ]);
+
+        return redirect()->route('discussions.show', $discussion);
+
     }
 
     /**

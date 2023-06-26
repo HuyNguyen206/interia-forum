@@ -7,10 +7,9 @@ defineProps({
 </script>
 
 <template>
-    <div class="py-12">
         <div>
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
+                <div class="p-2 text-gray-900">
                     <nav class="mt-3 space-y-2">
                         <ul class="flex flex-col space-y-2">
                             <Link  :class="{'font-semibold':!Object.keys(queries).length || (Object.keys(queries).length == 1 && queries.page)}" :href="route('home')"> All Discussion </Link>
@@ -26,7 +25,6 @@ defineProps({
 
             </div>
         </div>
-    </div>
 </template>
 
 <style scoped>

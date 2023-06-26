@@ -22,7 +22,7 @@ class Post extends Model
 
     public function parentPost()
     {
-            $this->belongsTo(Post::class, 'post_parent_id');
+        return  $this->belongsTo(Post::class, 'post_parent_id');
     }
 
     public function posts()

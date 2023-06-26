@@ -2,64 +2,35 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Post;
+use App\Models\Discussion;
 use Illuminate\Http\Request;
+use Spatie\LaravelMarkdown\MarkdownRenderer;
 
 class PostController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function previewMarkdown(Request $request)
     {
-        //
-    }
+        $request->validate([
+            'body' => 'required'
+        ]);
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+        return app(MarkdownRenderer::class)->highlightTheme('nord')->toHtml($request->body);
+   }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(Request $request, Discussion $discussion)
     {
-        //
-    }
+        $this->authorize('reply', $discussion);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Post $post)
-    {
-        //
-    }
+        $request->validate([
+            'body' => 'required'
+        ]);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Post $post)
-    {
-        //
-    }
+        $discussion->post->posts()->create([
+            'user_id' => $request->user()->id,
+            'discussion_id' => $discussion->id,
+            'body' => $request->body,
+        ]);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Post $post)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Post $post)
-    {
-        //
-    }
+        return redirect()->route('discussions.show', $discussion);
+   }
 }

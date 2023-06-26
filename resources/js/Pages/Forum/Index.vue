@@ -6,6 +6,8 @@ import Pagination from "@/Pages/Common/Pagination.vue";
 import Navigation from "@/Pages/Common/Navigation.vue";
 import _omitby from 'lodash.omitby'
 import _empty from 'lodash.isempty'
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import useCreateDiscussion from "@/Composables/useCreateDiscussion.js";
 
 defineProps({
     discussions: Object
@@ -16,6 +18,8 @@ const filterTopic = (e) => {
         preserveScroll: true
     })
 }
+
+const {visible, showCreateDiscussionForm} = useCreateDiscussion()
 </script>
 
 <template>
@@ -48,6 +52,7 @@ const filterTopic = (e) => {
 
         </div>
         <template #side>
+            <PrimaryButton v-if="$page.props.auth.user" @click.prevent="showCreateDiscussionForm()" class="mt-4">Start discussion</PrimaryButton>
            <Navigation :queries=discussions.queries></Navigation>
         </template>
 

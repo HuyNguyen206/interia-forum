@@ -3,11 +3,19 @@ import {Head} from '@inertiajs/vue3';
 import ForumLayout from "@/Layouts/ForumLayout.vue";
 import Post from "@/Pages/Forum/Discussion/Post.vue";
 import Pagination from "@/Pages/Common/Pagination.vue";
+import Navigation from "@/Pages/Common/Navigation.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import useCreateDiscussion from "@/Composables/useCreateDiscussion.js";
+import useCreateReply from "@/Composables/useCreateReply.js";
 
 defineProps({
     discussion: Object,
     posts: Object
 })
+
+const {visible, showCreateDiscussionForm} = useCreateDiscussion()
+const { showCreateDiscussionReply} = useCreateReply()
+
 </script>
 
 <template>
@@ -41,14 +49,15 @@ defineProps({
                     </div>
                 </div>
                 <div class="space-y-4 mt-2">
-                    <Post v-for="post in posts.data" :key="post.id" :post="post"></Post>
+                    <Post v-for="post in posts.data" :key="post.id" :post="post" :discussion="discussion.data"></Post>
                 </div>
                 <Pagination :links="posts.meta.links"></Pagination>
             </div>
 
         </div>
         <template #side>
-<!--           <Navigation></Navigation>-->
+            <PrimaryButton v-if="discussion.data.can.reply" @click.prevent="showCreateDiscussionReply(discussion.data)" class="mt-4">Reply</PrimaryButton>
+            <Navigation :queries="{}"></Navigation>
         </template>
 
     </ForumLayout>

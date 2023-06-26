@@ -1,9 +1,12 @@
 <script setup>
 
-defineProps({
-    post: Object
-})
+import useCreateReply from "@/Composables/useCreateReply.js";
 
+defineProps({
+    post: Object,
+    discussion: Object
+})
+const {showCreateDiscussionReply} = useCreateReply()
 </script>
 
 <template>
@@ -18,10 +21,10 @@ defineProps({
                         </div>
                         <div>
                             <span class="text-gray-400 text-sm mt-1 inline-block">{{post.created_at}}</span>
-                            <p class="mt-4">
-                                {{post.body}}
-                            </p>
+                            <p class="markdown mt-4" v-html="post.body_markdown"></p>
                         </div>
+
+                        <a href="" v-if="discussion.can.reply" @click.prevent="showCreateDiscussionReply(discussion)" class="text-blue-500">Reply</a>
 
                     </div>
                 </div>
