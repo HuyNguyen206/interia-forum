@@ -61,6 +61,8 @@ class DiscussionController extends Controller
         if ($postId = $request->post_id) {
             $offset = Post::query()->whereBelongsTo($discussion)->where('id', '<=', $postId)->orderBy('id')->count();
             $currentPage = ceil($offset / 5);
+
+            return redirect(route('discussions.show',['discussion' => $discussion, 'page' => $currentPage]));
         }
 
         return inertia()->render('Forum/Discussion/Show', [
