@@ -21,7 +21,7 @@ class PostResource extends JsonResource
                 'created_at' => $this->created_at?->diffForHumans(),
                 'body_preview' => Str::limit($this->body),
                 'user' => UserResource::make($this->whenLoaded('user')),
-                'discussion' => DiscussionResource::make($this->whenLoaded('discussion')),
+                'discussion' => DiscussionResource::make($this->whenLoaded('discussion'))
             ];
     }
 }

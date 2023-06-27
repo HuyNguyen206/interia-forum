@@ -10,7 +10,7 @@ const {showCreateDiscussionReply} = useCreateReply()
 </script>
 
 <template>
-        <div class="flex items-start">
+        <div class="flex items-start" :id="`post_${post.id}`">
             <div class="flex-grow">
                 <div class="">
 

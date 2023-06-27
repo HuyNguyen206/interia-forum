@@ -7,10 +7,10 @@ import InputError from "@/Components/InputError.vue";
 import Textarea from "@/Components/Textarea.vue";
 import useCreateReply from "@/Composables/useCreateReply.js";
 
-const {hideCreateDiscussionReply, form, discussion} = useCreateReply()
+const {hideCreateDiscussionReply, form, discussion, extraData} = useCreateReply()
 
 const createReply = function () {
-    console.log(discussion)
+    console.log(extraData)
     form.post(route('posts.store', {discussion: discussion.value.id}), {
         onSuccess: () => {
             form.reset()

@@ -55,11 +55,17 @@ class DiscussionController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Discussion $discussion)
+    public function show(Request $request, Discussion $discussion)
     {
+        $currentPage = null;
+        if ($postId = $request->post_id) {
+            $offset = Post::query()->whereBelongsTo($discussion)->where('id', '<=', $postId)->orderBy('id')->count();
+            $currentPage = ceil($offset / 5);
+        }
+
         return inertia()->render('Forum/Discussion/Show', [
             'discussion' => DiscussionResource::make($discussion->load('topic')->loadCount('posts')),
-            'posts' => PostResource::collection(Post::query()->with(['discussion', 'user'])->whereBelongsTo($discussion)->oldest()->paginate(10))
+            'posts' => PostResource::collection(Post::query()->with(['discussion', 'user'])->whereBelongsTo($discussion)->oldest('id')->paginate(5, page:$currentPage))
         ]);
     }
 

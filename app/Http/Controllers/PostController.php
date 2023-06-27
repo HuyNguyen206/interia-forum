@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Discussion;
+use App\Models\Post;
 use Illuminate\Http\Request;
 use Spatie\LaravelMarkdown\MarkdownRenderer;
 
@@ -19,6 +20,7 @@ class PostController extends Controller
 
     public function store(Request $request, Discussion $discussion)
     {
+//        dd($request->query());
         $this->authorize('reply', $discussion);
 
         $request->validate([
@@ -30,7 +32,7 @@ class PostController extends Controller
             'discussion_id' => $discussion->id,
             'body' => $request->body,
         ]);
-
-        return redirect()->route('discussions.show', $discussion);
+        $page = ceil(Post::query()->whereBelongsTo($discussion)->count() / 5);
+        return redirect()->route('discussions.show', [$discussion] + compact('page'));
    }
 }
