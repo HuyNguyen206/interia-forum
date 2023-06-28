@@ -1,12 +1,43 @@
 <script setup>
 
 import useCreateReply from "@/Composables/useCreateReply.js";
+import {router, useForm} from "@inertiajs/vue3";
+import {ref} from "vue";
+import Textarea from "@/Components/Textarea.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import InputError from "@/Components/InputError.vue";
 
-defineProps({
+const updatePost = () => {
+    editForm.patch(route('posts.update', props.post), {
+        onSuccess: () => {
+            isEdit.value = false
+        },
+        preserveScroll: true
+    })
+
+}
+
+const deletePost = () => {
+    if (!confirm('Are you sure to delete this post?')) {
+        return;
+    }
+
+    router.delete(route('posts.destroy', props.post), {
+        preserveScroll: true
+    })
+
+}
+const props = defineProps({
     post: Object,
     discussion: Object
 })
 const {showCreateDiscussionReply} = useCreateReply()
+
+const editForm = useForm({
+    body: props.post.body
+})
+
+const isEdit = ref(false)
 </script>
 
 <template>
@@ -21,10 +52,24 @@ const {showCreateDiscussionReply} = useCreateReply()
                         </div>
                         <div>
                             <span class="text-gray-400 text-sm mt-1 inline-block">{{post.created_at}}</span>
-                            <p class="markdown mt-4" v-html="post.body_markdown"></p>
+                            <p v-if="!isEdit" class="markdown mt-4" v-html="post.body_markdown"></p>
+                            <form @submit.prevent="updatePost" v-else >
+                                    <Textarea v-model="editForm.body" cols="30" id="body"  class="w-full h-48 rounded-lg align-top"/>
+                                    <InputError class="mt-2" :message="editForm.errors.body"/>
+                                <div class="flex space-x-2 my-2">
+                                    <PrimaryButton type="submit">Update</PrimaryButton>
+                                    <PrimaryButton @click.prevent="isEdit = false; editForm.body = post.body">Cancel</PrimaryButton>
+                                </div>
+
+                            </form>
+                        </div>
+                        <div class="flex justify-start space-x-2">
+                            <button v-if="discussion.can.reply" @click.prevent="showCreateDiscussionReply(discussion)" class="text-blue-500">Reply</button>
+                            <button v-if="post.can.edit" @click.prevent="isEdit = true" class="text-blue-500">Edit</button>
+                            <button v-if="post.can.delete" @click.prevent="deletePost" class="text-blue-500">Delete</button>
+                            <button v-if="discussion.can.mark_best_reply" class="text-blue-500">Mark best reply</button>
                         </div>
 
-                        <a href="" v-if="discussion.can.reply" @click.prevent="showCreateDiscussionReply(discussion)" class="text-blue-500">Reply</a>
 
                     </div>
                 </div>

@@ -62,12 +62,13 @@ class DiscussionController extends Controller
             $offset = Post::query()->whereBelongsTo($discussion)->where('id', '<=', $postId)->orderBy('id')->count();
             $currentPage = ceil($offset / 5);
 
-            return redirect(route('discussions.show',['discussion' => $discussion, 'page' => $currentPage]));
+            return redirect(route('discussions.show',['discussion' => $discussion, 'page' => $currentPage, 'post' => $postId]));
         }
 
         return inertia()->render('Forum/Discussion/Show', [
-            'discussion' => DiscussionResource::make($discussion->load('topic')->loadCount('posts')),
-            'posts' => PostResource::collection(Post::query()->with(['discussion', 'user'])->whereBelongsTo($discussion)->oldest('id')->paginate(5, page:$currentPage))
+            'discussion' => DiscussionResource::make($discussion->load(['topic', 'bestReply'])->loadCount('posts')),
+            'posts' => PostResource::collection(Post::query()->with(['discussion', 'user'])->whereBelongsTo($discussion)->oldest('id')->paginate(5, page:$currentPage)),
+            'postId' => $request->post
         ]);
     }
 
@@ -92,6 +93,10 @@ class DiscussionController extends Controller
      */
     public function destroy(Discussion $discussion)
     {
-        //
+        $this->authorize('delete', $discussion);
+
+        $discussion->delete();
+
+        return redirect(route('home'));
     }
 }

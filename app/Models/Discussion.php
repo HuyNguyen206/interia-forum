@@ -56,4 +56,9 @@ class Discussion extends Model
             ->groupBy('users.id', 'users.email', 'users.username', 'posts.discussion_id');
     }
 
+    public function bestReply()
+    {
+        return $this->belongsTo(Post::class, 'best_reply_post_id');
+    }
+
 }

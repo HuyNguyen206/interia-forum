@@ -12,6 +12,8 @@ class ForumController extends Controller
 {
     public function index(Request $request)
     {
+        $this->authorize('create', Discussion::class);
+
        return inertia()->render('Forum/Index', [
            'discussions' => DiscussionResource::collection(Discussion::query()
                ->when($topic = $request->topic, function (Builder $query) use ($topic){

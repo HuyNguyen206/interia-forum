@@ -27,12 +27,39 @@ class PostController extends Controller
             'body' => 'required'
         ]);
 
-        $discussion->post->posts()->create([
+        $post = $discussion->post->posts()->create([
             'user_id' => $request->user()->id,
             'discussion_id' => $discussion->id,
             'body' => $request->body,
         ]);
-        $page = ceil(Post::query()->whereBelongsTo($discussion)->count() / 5);
-        return redirect()->route('discussions.show', [$discussion] + compact('page'));
+//        $page = ceil(Post::query()->whereBelongsTo($discussion)->count() / 5);
+
+        return redirect()->route('discussions.show', [$discussion] + ['post_id' => $post->id]);
+   }
+
+   public function update(Request $request, Post $post)
+    {
+//        dd($request->query());
+        $this->authorize('edit', $post);
+
+        $request->validate([
+            'body' => 'required'
+        ]);
+
+        $post->update([
+            'body' => $request->body
+        ]);
+
+//        return redirect()->route('discussions.show', [$discussion] + ['post_id' => $post->id]);
+   }
+
+   public function destroy(Request $request, Post $post)
+    {
+//        dd($request->query());
+        $this->authorize('delete', $post);
+
+        $post->delete();
+
+//        return redirect()->route('discussions.show', [$discussion] + ['post_id' => $post->id]);
    }
 }
