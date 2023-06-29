@@ -36,7 +36,7 @@ class DiscussionPolicy
         return true;
     }
 
-    public function markBestReply(User $user, Discussion $discussion): bool
+    public function toggleBestReply(User $user, Discussion $discussion): bool
     {
         return $discussion->user_id === $user->id;
     }

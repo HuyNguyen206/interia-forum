@@ -5,11 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Laravel\Scout\Searchable;
 use Staudenmeir\EloquentEagerLimit\HasEagerLimit;
 
 class Discussion extends Model
 {
-    use HasFactory, HasEagerLimit;
+    use HasFactory, HasEagerLimit, Searchable;
 
     protected static function booted()
     {
@@ -59,6 +60,11 @@ class Discussion extends Model
     public function bestReply()
     {
         return $this->belongsTo(Post::class, 'best_reply_post_id');
+    }
+
+    public function toSearchableArray()
+    {
+        return $this->only(['title', 'id']);
     }
 
 }

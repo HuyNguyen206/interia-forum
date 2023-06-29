@@ -14,6 +14,8 @@ defineProps({
                         <ul class="flex flex-col space-y-2">
                             <Link  :class="{'font-semibold':!Object.keys(queries).length || (Object.keys(queries).length == 1 && queries.page)}" :href="route('home')"> All Discussion </Link>
                             <Link :class="{'font-semibold':queries.no_reply}" :href="route('home', {'no_reply': 1})"> No replies </Link>
+                            <Link :class="{'font-semibold':queries.solved == 1}" :href="route('home', {'solved': 1})"> Solved </Link>
+                            <Link :class="{'font-semibold':queries.solved == 0}" :href="route('home', {'solved': 0})"> Unsolved </Link>
                     </ul>
 
                         <ul class="flex flex-col space-y-2 border-t border-t-gray-200 mt-2 pt-2" v-if="$page.props.auth.user">

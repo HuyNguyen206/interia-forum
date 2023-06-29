@@ -12,14 +12,19 @@ class ForumController extends Controller
 {
     public function index(Request $request)
     {
-        $this->authorize('create', Discussion::class);
-
-       return inertia()->render('Forum/Index', [
+        return inertia()->render('Forum/Index', [
            'discussions' => DiscussionResource::collection(Discussion::query()
                ->when($topic = $request->topic, function (Builder $query) use ($topic){
                    $query->whereHas('topic', function ($query) use ($topic) {
                        $query->where('slug', $topic);
                    });
+               })
+               ->when($request->has('solved'), function ($query) use ($request){
+                   if ($request->boolean('solved')) {
+                       $query->whereNotNull('best_reply_post_id');
+                   } else {
+                       $query->whereNull('best_reply_post_id');
+                   }
                })
                ->when($request->no_reply, function (Builder $query){
                    $query->whereDoesntHave('posts');
@@ -43,8 +48,12 @@ class ForumController extends Controller
                    ->latest()
                    ->limit(1), 'desc'
                )
+               ->when($search = $request->search, function (Builder $query) use ($search) {
+                  $query->whereIn('id', Discussion::search($search)->get()->pluck('id'));
+               })
 //               ->latest('created_at')
-               ->paginate(10)->appends($queries = $request->query()))->additional(['queries' => $queries])
+               ->paginate(10)->appends($queries = $request->query()))->additional(['queries' => $queries]),
+            'search' => $request->search
        ]);
     }
 }

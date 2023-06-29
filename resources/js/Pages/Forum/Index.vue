@@ -8,9 +8,32 @@ import _omitby from 'lodash.omitby'
 import _empty from 'lodash.isempty'
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import useCreateDiscussion from "@/Composables/useCreateDiscussion.js";
+import TextInput from "@/Components/TextInput.vue";
+import {onMounted, ref, watch} from "vue";
 
-defineProps({
-    discussions: Object
+const props = defineProps({
+    discussions: Object,
+    search: String
+})
+
+const search = ref(null)
+
+onMounted(() => {
+    search.value = props.search
+})
+
+watch(search, function (query){
+    router.reload({
+        data: {'search' : query},
+        preserveScroll: true
+    })
+
+    // _debounce(() => {
+    //     router.reload({
+    //         data: {'search' : query},
+    //         preserveScroll: true
+    //     })
+    // }, 200)
 })
 
 const filterTopic = (e) => {
@@ -32,8 +55,10 @@ const {visible, showCreateDiscussionForm} = useCreateDiscussion()
         <div class="py-12">
             <div>
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="flex justify-between items-start">
-                        <div class="p-6 text-gray-900">You're logged in!</div>
+                    <div class="flex justify-between space-x-2">
+                        <div class="text-gray-900 flex-grow">
+                            <TextInput v-model="search" placeholder="Search discussion" class="w-full" type="search" id="search"></TextInput>
+                        </div>
                         <select
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg" @change="filterTopic">
                             <option value="">Choose a topic</option>
