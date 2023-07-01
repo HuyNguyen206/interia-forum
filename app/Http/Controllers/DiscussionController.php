@@ -6,6 +6,7 @@ use App\Http\Resources\DiscussionResource;
 use App\Http\Resources\PostResource;
 use App\Models\Discussion;
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
@@ -43,10 +44,17 @@ class DiscussionController extends Controller
 
         $discussion = $request->user()->discussions()->create(Arr::except($data, ['body']));
 
-        $discussion->posts()->create([
+        $post = $discussion->posts()->create([
             'user_id' => $request->user()->id,
             'body' => $request->body,
         ]);
+
+        preg_match_all('/\@(?P<username>[a-z-A-Z\-\_]+)/', $request->body, $mentionUsers, PREG_SET_ORDER);
+        $userNames = collect($mentionUsers)->pluck('username');
+
+        if (collect($userNames)) {
+            $post->mentionUsers()->attach(User::query()->whereIn('username', $userNames)->pluck('id'));
+        }
 
         return redirect()->route('discussions.show', $discussion);
 

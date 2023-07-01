@@ -7,6 +7,8 @@ import TextInput from "@/Components/TextInput.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import Textarea from "@/Components/Textarea.vue";
 import useCreateDiscussion from "@/Composables/useCreateDiscussion.js";
+import {Mentionable} from 'vue-mention'
+import useMention from "@/Composables/useMention.js";
 
 const {hideCreateDiscussionForm, form} = useCreateDiscussion()
 const createDiscussion = function () {
@@ -17,6 +19,8 @@ const createDiscussion = function () {
         }
     })
 }
+const {items, loading, loadUsers} = useMention()
+
 </script>
 
 <template>
@@ -28,45 +32,71 @@ const createDiscussion = function () {
             </div>
 
         </template>
-            <template #main="{markdownPreviewEnabled}">
-                <div class="flex justify-between items-end space-x-2 mb-2">
-                    <div class="flex-grow">
-                        <InputLabel for="title" value="Title"/>
+        <template #main="{markdownPreviewEnabled}">
+            <div class="flex justify-between items-end space-x-2 mb-2">
+                <div class="flex-grow">
+                    <InputLabel for="title" value="Title"/>
 
-                        <TextInput
-                            id="title"
-                            type="text"
-                            class="mt-1 block w-full"
-                            v-model="form.title"
-                        />
-                        <InputError class="mt-2" :message="form.errors.title"/>
-                    </div>
-                    <div>
-                        <select v-model="form.topic_id"
-                                class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
-                            <option value="">Select topic</option>
-                            <option :value="topic.id" v-for="topic in $page.props.topics.data" :key="topic.id">
-                                {{ topic.name }}
-                            </option>
-                        </select>
-                        <InputError class="mt-2" :message="form.errors.topic_id"/>
-                    </div>
+                    <TextInput
+                        id="title"
+                        type="text"
+                        class="mt-1 block w-full"
+                        v-model="form.title"
+                    />
+                    <InputError class="mt-2" :message="form.errors.title"/>
                 </div>
-                <div class="mt-4">
-                    <InputLabel for="body" value="Body"/>
-                    <Textarea v-if="!markdownPreviewEnabled" v-model="form.body" cols="30" id="body"  class="w-full h-48 rounded-lg align-top"/>
-                    <InputError class="mt-2" :message="form.errors.body"/>
+                <div>
+                    <select v-model="form.topic_id"
+                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                        <option value="">Select topic</option>
+                        <option :value="topic.id" v-for="topic in $page.props.topics.data" :key="topic.id">
+                            {{ topic.name }}
+                        </option>
+                    </select>
+                    <InputError class="mt-2" :message="form.errors.topic_id"/>
                 </div>
-            </template>
+            </div>
+            <div class="mt-4">
+                <InputLabel for="body" value="Body"/>
+                <Mentionable
+                    :keys="['@']"
+                    :items="items"
+                    offset="6"
+                    insert-space
+                    filtering-disabled
+                    @search="loadUsers($event)"
+                >
+                    <Textarea v-if="!markdownPreviewEnabled" v-model="form.body" cols="30" id="body"
+                              class="w-full h-48 rounded-lg align-top"/>
 
-            <template #button>
-                <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Create
-                </PrimaryButton>
-                <PrimaryButton  @click.prevent="hideCreateDiscussionForm">
-                    Cancel
-                </PrimaryButton>
-            </template>
+
+                    <template #no-result>
+                        <div class="p-2">
+                            {{ loading ? 'Loading...' : 'No result' }}
+                        </div>
+                    </template>
+
+                    <template #item-@="{ item }">
+                        <div class="item">
+                            {{ item.value }}
+                            <span class="dim">
+          ({{ item.label }})
+        </span>
+                        </div>
+                    </template>
+                </Mentionable>
+                <InputError class="mt-2" :message="form.errors.body"/>
+            </div>
+        </template>
+
+        <template #button>
+            <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                Create
+            </PrimaryButton>
+            <PrimaryButton @click.prevent="hideCreateDiscussionForm">
+                Cancel
+            </PrimaryButton>
+        </template>
 
     </FixedFormWrapper>
 </template>

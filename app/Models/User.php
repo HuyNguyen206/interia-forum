@@ -8,11 +8,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Laravel\Scout\Searchable;
 use Staudenmeir\EloquentEagerLimit\HasEagerLimit;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, HasEagerLimit;
+    use HasApiTokens, HasFactory, Notifiable, HasEagerLimit, Searchable;
 
     protected $appends = ['avatar'];
 
@@ -56,5 +57,18 @@ class User extends Authenticatable
     public function discussions()
     {
         return $this->hasMany(Discussion::class);
+    }
+
+    public function toSearchableArray()
+    {
+        return [
+            'label' => $this->name . "(@{$this->username})",
+            'value' => $this->username
+        ];
+    }
+
+    public function mentionPosts()
+    {
+        return $this->belongsToMany(Post::class, 'mentions')->withTimestamps();
     }
 }

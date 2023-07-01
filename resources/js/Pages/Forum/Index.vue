@@ -6,6 +6,7 @@ import Pagination from "@/Pages/Common/Pagination.vue";
 import Navigation from "@/Pages/Common/Navigation.vue";
 import _omitby from 'lodash.omitby'
 import _empty from 'lodash.isempty'
+import _debounce from 'lodash.debounce'
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import useCreateDiscussion from "@/Composables/useCreateDiscussion.js";
 import TextInput from "@/Components/TextInput.vue";
@@ -22,19 +23,12 @@ onMounted(() => {
     search.value = props.search
 })
 
-watch(search, function (query){
+watch(search, _debounce(function (query){
     router.reload({
         data: {'search' : query},
         preserveScroll: true
     })
-
-    // _debounce(() => {
-    //     router.reload({
-    //         data: {'search' : query},
-    //         preserveScroll: true
-    //     })
-    // }, 200)
-})
+}, 500))
 
 const filterTopic = (e) => {
     router.visit(route('home', _omitby({topic: e.target.value}, _empty)), {

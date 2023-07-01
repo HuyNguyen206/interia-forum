@@ -32,7 +32,6 @@ class PostController extends Controller
             'discussion_id' => $discussion->id,
             'body' => $request->body,
         ]);
-//        $page = ceil(Post::query()->whereBelongsTo($discussion)->count() / 5);
 
         return redirect()->route('discussions.show', [$discussion] + ['post_id' => $post->id]);
    }

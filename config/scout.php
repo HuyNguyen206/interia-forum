@@ -133,9 +133,9 @@ return [
         'host' => env('MEILISEARCH_HOST', 'http://localhost:7700'),
         'key' => env('MEILISEARCH_KEY'),
         'index-settings' => [
-            // 'users' => [
-            //     'filterableAttributes'=> ['id', 'name', 'email'],
-            // ],
+             'users' => [
+                 'sortableAttributes' => ['id', 'created_at', 'updated_at'],
+             ],
             \App\Models\Discussion::class => [
                 'filterableAttributes'=> ['topic_id', 'title', 'slug'],
                 'sortableAttributes' => ['id', 'created_at', 'updated_at', 'pinned_at'],

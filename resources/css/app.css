@@ -9,3 +9,12 @@
 code {
     @apply whitespace-pre-wrap leading-loose
 }
+
+.mention-item {
+    padding: 4px 10px;
+    border-radius: 4px;
+}
+
+.mention-selected {
+    @apply bg-gray-400 cursor-pointer
+}

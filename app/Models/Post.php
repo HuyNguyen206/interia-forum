@@ -22,7 +22,7 @@ class Post extends Model
 
     public function parentPost()
     {
-        return  $this->belongsTo(Post::class, 'post_parent_id');
+        return $this->belongsTo(Post::class, 'post_parent_id');
     }
 
     public function posts()
@@ -33,5 +33,10 @@ class Post extends Model
     public function discussion()
     {
         return $this->belongsTo(Discussion::class);
+    }
+
+    public function mentionUsers()
+    {
+        return $this->belongsToMany(User::class, 'mentions')->withTimestamps();
     }
 }
