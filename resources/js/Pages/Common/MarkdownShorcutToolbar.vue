@@ -8,6 +8,7 @@
             <md-italic class="cursor-pointer">italic</md-italic>
             <md-code class="cursor-pointer">code</md-code>
             <md-link class="cursor-pointer">link</md-link>
+            <md-mention class="cursor-pointer">mention</md-mention>
         </markdown-toolbar>
 </template>
 

@@ -79,7 +79,7 @@ const isEdit = ref(false)
                             </form>
                         </div>
                         <div class="flex justify-start space-x-2">
-                            <button v-if="discussion.can.reply" @click.prevent="showCreateDiscussionReply(discussion)" class="text-blue-500">Reply</button>
+                            <button v-if="discussion.can.reply" @click.prevent="showCreateDiscussionReply(discussion, post.user)" class="text-blue-500">Reply</button>
                             <button v-if="post.can.edit" @click.prevent="isEdit = true" class="text-blue-500">Edit</button>
                             <button v-if="post.can.delete" @click.prevent="deletePost" class="text-blue-500">Delete</button>
                             <button v-if="discussion.can.mark_best_reply" @click="toggleBestReply" class="text-blue-500"> {{isBestReply ? 'UnMark' : 'Mark best reply'}}</button>

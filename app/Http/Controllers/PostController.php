@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Discussion;
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\LaravelMarkdown\MarkdownRenderer;
 
@@ -33,6 +34,13 @@ class PostController extends Controller
             'body' => $request->body,
         ]);
 
+        preg_match_all('/\@(?P<username>[a-z-A-Z\-\_]+)/', $request->body, $mentionUsers, PREG_SET_ORDER);
+        $userNames = collect($mentionUsers)->pluck('username');
+
+        if (collect($userNames)) {
+            $post->mentionUsers()->attach(User::query()->whereIn('username', $userNames)->pluck('id'));
+        }
+        
         return redirect()->route('discussions.show', [$discussion] + ['post_id' => $post->id]);
    }
 

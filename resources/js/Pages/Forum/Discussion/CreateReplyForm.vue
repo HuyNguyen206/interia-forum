@@ -6,6 +6,9 @@ import InputLabel from "@/Components/InputLabel.vue";
 import InputError from "@/Components/InputError.vue";
 import Textarea from "@/Components/Textarea.vue";
 import useCreateReply from "@/Composables/useCreateReply.js";
+import {Mentionable} from "vue-mention";
+import useMention from "@/Composables/useMention.js";
+import {onMounted} from "vue";
 
 const {hideCreateDiscussionReply, form, discussion, extraData} = useCreateReply()
 
@@ -18,6 +21,16 @@ const createReply = function () {
         }
     })
 }
+const {items, loading, loadUsers} = useMention()
+const {postAuthor} = useCreateReply()
+onMounted(() => {
+    if (!postAuthor.value?.username) {
+        return
+    }
+
+    form.body = '@'+postAuthor.value.username
+})
+
 </script>
 
 <template>
@@ -32,7 +45,31 @@ const createReply = function () {
         <template #main="{markdownPreviewEnabled}">
             <div class="mt-4">
                 <InputLabel for="body" value="Body"/>
-                <Textarea v-if="!markdownPreviewEnabled" v-model="form.body" cols="30" id="body"  class="w-full h-48 rounded-lg align-top"/>
+                <Mentionable
+                    :keys="['@']"
+                    :items="items"
+                    offset="6"
+                    insert-space
+                    filtering-disabled
+                    @search="loadUsers($event)"
+                >
+                    <Textarea v-if="!markdownPreviewEnabled" v-model="form.body" cols="30" id="body"  class="w-full h-48 rounded-lg align-top"/>
+
+                    <template #no-result>
+                        <div class="p-2">
+                            {{ loading ? 'Loading...' : 'No result' }}
+                        </div>
+                    </template>
+
+                    <template #item-@="{ item }">
+                        <div class="item">
+                            {{ item.value }}
+                            <span class="dim">
+          ({{ item.label }})
+        </span>
+                        </div>
+                    </template>
+                </Mentionable>
                 <InputError class="mt-2" :message="form.errors.body"/>
             </div>
         </template>

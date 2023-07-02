@@ -2,7 +2,7 @@ import {ref} from "vue";
 import {useForm} from "@inertiajs/vue3";
 
 
-const visible = ref(true)
+const visible = ref(false)
 
 export default () => {
     const showCreateDiscussionForm = () => {

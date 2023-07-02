@@ -13,10 +13,18 @@ class ForumController extends Controller
     public function index(Request $request)
     {
         return inertia()->render('Forum/Index', [
-           'discussions' => DiscussionResource::collection(Discussion::query()
+           'discussions' => DiscussionResource::collection(
+               Discussion::query()
                ->when($topic = $request->topic, function (Builder $query) use ($topic){
                    $query->whereHas('topic', function ($query) use ($topic) {
                        $query->where('slug', $topic);
+                   });
+               })
+               ->when($request->boolean('mentioned'), function (Builder $query) {
+                   $query->whereHas('posts', function (Builder $query) {
+                       $query->whereHas('mentionUsers', function ($query){
+                           $query->where('users.id', auth()->id());
+                       });
                    });
                })
                ->when($request->has('solved'), function ($query) use ($request){

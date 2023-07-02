@@ -4,13 +4,13 @@ import {useForm} from "@inertiajs/vue3";
 
 const visibleReply = ref(false)
 const discussion = ref(null)
-const extraData = ref({})
+const postAuthor = ref({})
 
 export default () => {
-    const showCreateDiscussionReply = (discussionContent, extraDataContent) => {
+    const showCreateDiscussionReply = (discussionContent, postAuthorContent) => {
         visibleReply.value = true
         discussion.value =  discussionContent
-        extraData.value =  extraDataContent
+        postAuthor.value =  postAuthorContent
     }
 
     const hideCreateDiscussionReply = () => {
@@ -26,6 +26,6 @@ export default () => {
     })
 
     return {
-        visibleReply, showCreateDiscussionReply, hideCreateDiscussionReply, toggleCreateDiscussionReply, form, discussion, extraData
+        visibleReply, showCreateDiscussionReply, hideCreateDiscussionReply, toggleCreateDiscussionReply, form, discussion, postAuthor
     }
 }
