@@ -25,6 +25,7 @@ class PostResource extends JsonResource
                 'can' => [
                     'edit' =>  $request->user()?->can('edit', $this->resource),
                     'delete' => $request->user()?->can('delete', $this->resource),
+                    'mark_best_reply' => $request->user()?->can('toggleBestReply', [$this->resource, $request->discussion]),
                 ]
             ];
     }

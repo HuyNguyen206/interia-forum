@@ -31,7 +31,7 @@ Route::post('/posts/markdown/preview', [\App\Http\Controllers\PostController::cl
 
 Route::middleware('auth')->group(function () {
     Route::post('discussions', [\App\Http\Controllers\DiscussionController::class, 'store'])->name('discussions.store');
-    Route::patch('discussions/{discussion}/best-reply/mark/{post?}', [\App\Http\Controllers\DiscussionController::class, 'toggleBestReply'])->name('discussions.mark-best-reply');
+    Route::patch('discussions/{discussion}/best-reply/mark/{post}', [\App\Http\Controllers\DiscussionController::class, 'toggleBestReply'])->name('discussions.mark-best-reply');
     Route::delete('discussions/{discussion}/posts/{post}', [\App\Http\Controllers\DiscussionController::class, 'destroy'])->name('discussions.destroy');
     Route::post('discussions/{discussion}/posts', [\App\Http\Controllers\PostController::class, 'store'])->name('posts.store');
     Route::patch('posts/{post}', [\App\Http\Controllers\PostController::class, 'update'])->name('posts.update');

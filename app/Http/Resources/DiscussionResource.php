@@ -31,7 +31,7 @@ class DiscussionResource extends JsonResource
                     'create' => (bool) $request->user()?->can('create', Discussion::class),
                     'reply' => (bool) $request->user()?->can('reply', $this->resource),
                     'delete' => (bool) $request->user()?->can('delete', $this->resource),
-                    'mark_best_reply' => (bool) $request->user()?->can('delete', $this->resource),
+//                    'mark_best_reply' => (bool) $request->user()?->can('toggleBestReply', $this->resource),
                 ]
             ];
 

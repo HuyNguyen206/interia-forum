@@ -108,12 +108,12 @@ class DiscussionController extends Controller
         return redirect(route('home'));
     }
 
-    public function toggleBestReply(Discussion $discussion, ?Post $post)
+    public function toggleBestReply(Discussion $discussion, Post $post)
     {
-        $this->authorize('toggleBestReply', $discussion);
+        $this->authorize('toggleBestReply', [$post, $discussion]);
 
         $discussion->update([
-            'best_reply_post_id' => $post ? $post->id : null
+            'best_reply_post_id' => $post->id ===  $discussion->best_reply_post_id ? null : $post->id
         ]);
 
         return back();
